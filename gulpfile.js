@@ -25,6 +25,11 @@ gulp.task('lib', function () {
              .pipe(gulp.dest('./public/js'));
 });
 
+gulp.task('img', function () {
+  return gulp.src('./src/img/**/*')
+             .pipe(gulp.dest('./public/img'));
+});
+
 gulp.task('html', function () {
   return gulp.src('./src/index.html')
              .pipe(gulp.dest('./public'));
@@ -40,5 +45,5 @@ gulp.task('watch', function () {
 });
 
 gulp.task('default', function () {
-  gulp.run('html', 'js', 'lib');
+  gulp.run('html', 'img', 'js', 'lib');
 });
