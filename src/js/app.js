@@ -88,8 +88,8 @@ var Page = React.createClass({
   },
   render: function () {
     return this.state.user ?
-      <Contributions user={this.state.user} onCancel={this.handleCancel.bind(this)} /> :
-      <UserForm onSubmit={this.handleSubmit.bind(this)} />;
+      <Contributions user={this.state.user} onCancel={this.handleCancel} /> :
+      <UserForm onSubmit={this.handleSubmit} />;
   }
 });
 
