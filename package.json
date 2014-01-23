@@ -1,0 +1,17 @@
+{
+  "name": "contrib",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
+  "license": "BSD",
+  "dependencies": {
+    "envify": "~0.2.0",
+    "react": "~0.8.0",
+    "gulp-browserify": "~0.3.3",
+    "gulp": "~3.4.0",
+    "reactify": "~0.5.1"
+  }
+}
