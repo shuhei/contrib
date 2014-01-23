@@ -2,9 +2,10 @@
 
 'use strict';
 
+var React = require('react');
+
 var Contributions = React.createClass({
   render: function () {
-    console.log();
     var items = this.props.contribs.map(function (date) {
       return <li>{date[0]}: {date[1]}</li>;
     });
