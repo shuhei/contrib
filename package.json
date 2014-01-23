@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "prepublish": "./node_modules/.bin/gulp"
   },
   "author": "Shuhei Kagawa <shuhei.kagawa@gmail.com>",
