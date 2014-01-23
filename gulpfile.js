@@ -12,8 +12,7 @@ gulp.task('js', function () {
              .on('prebundle', function (bundler) {
                libs.forEach(function (lib) { bundler.external(lib); });
              })
-             .pipe(gulp.dest('./public/js'))
-             .on('error', gutil.log);
+             .pipe(gulp.dest('./public/js'));
 });
 
 gulp.task('lib', function () {
@@ -23,8 +22,7 @@ gulp.task('lib', function () {
              .on('prebundle', function (bundler) {
                libs.forEach(function (lib) { bundler.require(lib); });
              })
-             .pipe(gulp.dest('./public/js'))
-             .on('error', gutil.log);
+             .pipe(gulp.dest('./public/js'));
 });
 
 gulp.task('html', function () {
