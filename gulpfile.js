@@ -1,24 +1,30 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
+var plumber = require('gulp-plumber');
+var gutil = require('gulp-util');
 
 var libs = ['react'];
 
 gulp.task('js', function () {
   return gulp.src('./src/js/app.js', { read: false })
+             .pipe(plumber())
              .pipe(browserify({ transform: ['reactify'] }))
              .on('prebundle', function (bundler) {
                libs.forEach(function (lib) { bundler.external(lib); });
              })
-             .pipe(gulp.dest('./public/js'));
+             .pipe(gulp.dest('./public/js'))
+             .on('error', gutil.log);
 });
 
 gulp.task('lib', function () {
   return gulp.src('./src/js/lib.js', { read: false })
+             .pipe(plumber())
              .pipe(browserify())
              .on('prebundle', function (bundler) {
                libs.forEach(function (lib) { bundler.require(lib); });
              })
-             .pipe(gulp.dest('./public/js'));
+             .pipe(gulp.dest('./public/js'))
+             .on('error', gutil.log);
 });
 
 gulp.task('html', function () {
