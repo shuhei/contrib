@@ -35,8 +35,9 @@ var Contributions = React.createClass({
   },
   render: function () {
     return (
-      <div>
-        <h1>{this.props.user} <button onClick={this.props.onCancel}>&times;</button></h1>
+      <div className="contributions">
+        <h1>{this.props.user}</h1>
+        <button className="cancel" onClick={this.props.onCancel}>&times;</button>
         {this.state.isLoading ?
           <p key="loading">Loading</p> :
           <Matrix items={this.state.contribs} />
