@@ -35,9 +35,11 @@ var Contributions = React.createClass({
   },
   render: function () {
     return (
-      <div className="contributions">
-        <h1>{this.props.user}</h1>
-        <button className="cancel" onClick={this.props.onCancel}>&times;</button>
+      <div>
+        <header>
+          <h1>{this.props.user}</h1>
+          <button className="cancel" onClick={this.props.onCancel}>&times;</button>
+        </header>
         {this.state.isLoading ?
           <p key="loading">Loading</p> :
           <Matrix items={this.state.contribs} />
@@ -66,6 +68,9 @@ var UserForm = React.createClass({
   render: function () {
     return (
       <div className="user-form">
+        <header>
+          <h1>Contrib</h1>
+        </header>
         <p>Input GitHub user name</p>
         <input type="text" value={this.state.user} onChange={this.handleChange} onKeyDown={this.handleKeyDown} />
         <button onClick={this.handleClick}>OK</button>
