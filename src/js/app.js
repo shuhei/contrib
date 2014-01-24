@@ -83,8 +83,10 @@ var Page = React.createClass({
     this.setState({ user: null });
   },
   handleSubmit: function (user) {
-    window.localStorage['githubUser'] = user;
-    this.setState({ user: user });
+    if (typeof user === 'string') {
+      window.localStorage['githubUser'] = user;
+      this.setState({ user: user });
+    }
   },
   render: function () {
     return this.state.user ?
