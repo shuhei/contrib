@@ -23,13 +23,13 @@ A simple web app for people who really care about their github contributions mat
   npm install
   ```
 
-6. Start the server.
+5. Start the server.
 
   ```
   node index.js
   ```
 
-7. You can also open another terminal and start watching file changes.
+6. You can also open another terminal and start watching file changes.
 
   ```
   gulp watch
