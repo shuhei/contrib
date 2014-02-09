@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var browserify = require('gulp-browserify');
 var plumber = require('gulp-plumber');
+var manifest = require('gulp-manifest');
 
 var libs = ['react'];
 
@@ -27,9 +28,15 @@ gulp.task('html', function () {
              .pipe(gulp.dest('./public'));
 });
 
-gulp.task('watch', function () {
-  gulp.watch('./src/js/**/*', 'js');
-  gulp.watch('./src/*.html', 'html');
+gulp.task('manifest', ['html', 'img', 'js', 'lib'], function () {
+  return gulp.src('./public/**/*')
+             .pipe(manifest({ hash: true, timestamp: false, exclude: 'app.manifest' }))
+             .pipe(gulp.dest('./public'));
 });
 
-gulp.task('default', ['html', 'img', 'js', 'lib']);
+gulp.task('watch', function () {
+  gulp.watch('./src/js/**/*', ['js']);
+  gulp.watch('./src/*.html', ['html']);
+});
+
+gulp.task('default', ['manifest']);

@@ -20,6 +20,7 @@
     "gulp": "~3.5.2",
     "reactify": "~0.7.0",
     "gulp-plumber": "~0.5.6",
-    "mime": "~1.2.11"
+    "mime": "~1.2.11",
+    "gulp-manifest": "shuhei/gulp-manifest#emit-file"
   }
 }
