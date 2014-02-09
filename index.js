@@ -3,6 +3,7 @@ var https = require('https');
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
+var mime = require('mime');
 
 var PORT = process.env['PORT'] || 3000;
 var CONTRIBUTIONS = '/contributions/';
@@ -13,23 +14,28 @@ server.on('request', function (request, response) {
   var p = parsed.path;
   console.error(p);
 
-  // Github Contributions
+  // -- Github Contributions
   if (p.indexOf(CONTRIBUTIONS) === 0) {
     var userName = p.slice(CONTRIBUTIONS.length);
     var contribUrl = 'https://github.com/users/' + userName + '/contributions_calendar_data';
     https.get(contribUrl)
-         .on('response', function (res) {
-           res.pipe(response);
-         })
-         .on('error', function (err) {
-           console.error(err.message);
-           response.statusCode = 500;
-           response.end();
-         })
+      .on('response', function (res) {
+        response.writeHead(res.statusCode, {
+          'Content-Type': res.headers['content-type'],
+          'Content-Length': res.headers['content-length']
+        });
+        res.pipe(response);
+      })
+      .on('error', function (err) {
+        console.error(err.message);
+        response.statusCode = 500;
+        response.end();
+      });
     return;
   }
 
-  // Static files
+  // -- Static files
+  // Malicious path
   if (p.indexOf('..') >= 0) {
     console.error('Potentially malicious path:', p);
     response.statusCode = 403;
@@ -37,13 +43,18 @@ server.on('request', function (request, response) {
     return;
   }
 
+  // index.html
   if (p === '/') p = 'index.html';
 
+  // Serve file.
   fs.createReadStream(path.join(__dirname, 'public', p))
     .on('error', function (err) {
       console.error(err.message);
       response.statusCode = 404;
       response.end();
+    })
+    .once('readable', function () {
+      response.writeHead(200, { 'Content-Type': mime.lookup(p) });
     })
     .pipe(response);
 });
