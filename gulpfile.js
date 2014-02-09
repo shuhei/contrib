@@ -29,8 +29,15 @@ gulp.task('html', function () {
 });
 
 gulp.task('manifest', ['html', 'img', 'js', 'lib'], function () {
+  // node-mime serves '*.appcache' as 'text/cache-manifest'.
+  var manifestFile = 'app.appcache';
   return gulp.src('./public/**/*')
-             .pipe(manifest({ hash: true, timestamp: false, exclude: 'app.manifest' }))
+             .pipe(manifest({
+               hash: true,
+               timestamp: false,
+               exclude: manifestFile,
+               filename: manifestFile
+             }))
              .pipe(gulp.dest('./public'));
 });
 
