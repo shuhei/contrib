@@ -84,7 +84,8 @@ var Page = React.createClass({
     return { user: window.localStorage.getItem('githubUser') };
   },
   handleCancel: function () {
-    delete window.localStorage.getItem('githubUser');
+    window.localStorage.removeItem('githubUser');
+    window.localStorage.removeItem('contribs');
     this.setState({ user: null });
   },
   handleSubmit: function (user) {
