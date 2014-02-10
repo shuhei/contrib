@@ -7,8 +7,9 @@ var Matrix = require('./matrix');
 
 var Contributions = React.createClass({
   getInitialState: function () {
+    var contribs = JSON.parse(window.localStorage.getItem('contribs') || '[]');
     return {
-      contribs: [],
+      contribs: contribs,
       isLoading: false
     };
   },
@@ -24,6 +25,7 @@ var Contributions = React.createClass({
           isLoading: false,
           contribs: JSON.parse(xhr.responseText)
         });
+        window.localStorage.setItem('contribs', xhr.responseText);
       } else {
         self.setState({ isLoading: false });
         console.log('Something went wrong.', xhr.status);
@@ -35,15 +37,13 @@ var Contributions = React.createClass({
   },
   render: function () {
     return (
-      <div>
+      <div className="contributions">
         <header>
           <h1>{this.props.user}</h1>
           <button className="cancel" onClick={this.props.onCancel}>&times;</button>
         </header>
-        {this.state.isLoading ?
-          <p key="loading">Loading</p> :
-          <Matrix items={this.state.contribs} />
-        }
+        {this.state.isLoading ? <p key="loading" className="loading">Loading</p> : ''}
+        {this.state.contribs.length > 0 ? <Matrix items={this.state.contribs} /> : ''}
       </div>
     );
   }
@@ -81,15 +81,15 @@ var UserForm = React.createClass({
 
 var Page = React.createClass({
   getInitialState: function () {
-    return { user: window.localStorage['githubUser'] };
+    return { user: window.localStorage.getItem('githubUser') };
   },
   handleCancel: function () {
-    delete window.localStorage['githubUser'];
+    delete window.localStorage.getItem('githubUser');
     this.setState({ user: null });
   },
   handleSubmit: function (user) {
     if (typeof user === 'string') {
-      window.localStorage['githubUser'] = user;
+      window.localStorage.setItem('githubUser', user);
       this.setState({ user: user });
     }
   },
