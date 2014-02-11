@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var browserify = require('gulp-browserify');
 var plumber = require('gulp-plumber');
 var manifest = require('gulp-manifest');
+var libBundle = require('./gulp-lib-bundle');
 
 var libs = ['react'];
 
@@ -13,7 +14,7 @@ gulp.task('js', function () {
 });
 
 gulp.task('lib', function () {
-  return gulp.src('./src/js/lib.js', { read: false })
+  return libBundle(libs, { path: './src/js/lib.js' })
              .pipe(browserify({ require: libs }))
              .pipe(gulp.dest('./public/js'));
 });
