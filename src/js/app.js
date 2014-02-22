@@ -5,6 +5,25 @@
 var React = require('react');
 var Matrix = require('./matrix');
 
+var Loading = React.createClass({
+  render: function () {
+    return <div>
+      {this.props.isLoading ?
+        <p key="loading" className="loading">Loading</p> : ''}
+    </div>;
+  }
+});
+
+var StatsItem = React.createClass({
+  render: function () {
+    return <div className="stats-item">
+      <span className="stats-num">{this.props.value}</span>
+      <br />
+      <span className="stats-unit">{this.props.unit}</span>
+    </div>;
+  }
+});
+
 var Contributions = React.createClass({
   getInitialState: function () {
     var contribs = JSON.parse(window.localStorage.getItem('contribs') || '[]');
@@ -35,14 +54,33 @@ var Contributions = React.createClass({
     this.setState({ isLoading: true });
     xhr.send(null);
   },
+  totalContibutions: function () {
+    return this.state.contribs.reduce(function (acc, day) {
+      return acc + day[1];
+    }, 0);
+  },
+  currentStreak: function () {
+    var reversed = this.state.contribs.slice().reverse();
+    return reversed.reduce(function (acc, day) {
+      var done = acc[1] || day[1] <= 0;
+      var newCount = acc[0] + (done ? 0 : 1);
+      return [newCount, done];
+    }, [0, false])[0];
+  },
   render: function () {
+    var total = this.totalContibutions();
+    var current = this.currentStreak();
     return (
       <div className="contributions">
         <header>
           <h1>{this.props.user}</h1>
           <button className="cancel" onClick={this.props.onCancel}>&times;</button>
         </header>
-        {this.state.isLoading ? <p key="loading" className="loading">Loading</p> : ''}
+        <Loading isLoading={this.state.isLoading} />
+        <div className="stats">
+          <StatsItem value={current} unit="Days" />
+          <StatsItem value={total} unit="Total" />
+        </div>
         {this.state.contribs.length > 0 ? <Matrix items={this.state.contribs} /> : ''}
       </div>
     );

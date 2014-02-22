@@ -19,6 +19,11 @@ gulp.task('lib', function () {
              .pipe(gulp.dest('./public/js'));
 });
 
+gulp.task('css', function () {
+  return gulp.src('./src/css/*.css')
+             .pipe(gulp.dest('./public/css'));
+});
+
 gulp.task('img', function () {
   return gulp.src('./src/img/**/*')
              .pipe(gulp.dest('./public/img'));
@@ -29,7 +34,7 @@ gulp.task('html', function () {
              .pipe(gulp.dest('./public'));
 });
 
-gulp.task('manifest', ['html', 'img', 'js', 'lib'], function () {
+gulp.task('manifest', ['html', 'img', 'css', 'js', 'lib'], function () {
   // node-mime serves '*.appcache' as 'text/cache-manifest'.
   var manifestFile = 'app.appcache';
   return gulp.src('./public/**/*')
@@ -43,8 +48,7 @@ gulp.task('manifest', ['html', 'img', 'js', 'lib'], function () {
 });
 
 gulp.task('watch', function () {
-  gulp.watch('./src/js/**/*', ['js']);
-  gulp.watch('./src/*.html', ['html']);
+  gulp.watch(['./src/js/**/*', './src/css/*.css', './src/*.html'], ['manifest']);
 });
 
 gulp.task('default', ['manifest']);
