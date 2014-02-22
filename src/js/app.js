@@ -7,10 +7,14 @@ var Matrix = require('./matrix');
 
 var Loading = React.createClass({
   render: function () {
-    return <div>
-      {this.props.isLoading ?
-        <p key="loading" className="loading">Loading</p> : ''}
-    </div>;
+    if (this.props.isLoading) {
+      return <div className="spinner">
+        <div className="double-bounce1" />
+        <div className="double-bounce2" />
+      </div>;
+    } else {
+      return <div />
+    }
   }
 });
 
@@ -73,10 +77,10 @@ var Contributions = React.createClass({
     return (
       <div className="contributions">
         <header>
+          <Loading isLoading={this.state.isLoading} />
           <h1>{this.props.user}</h1>
           <button className="cancel" onClick={this.props.onCancel}>&times;</button>
         </header>
-        <Loading isLoading={this.state.isLoading} />
         <div className="stats">
           <StatsItem value={current} unit="Days" />
           <StatsItem value={total} unit="Total" />

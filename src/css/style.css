@@ -20,6 +20,14 @@ header h1 {
   margin: 0;
 }
 
+header .spinner {
+  height: 18px;
+  left: 20px;
+  position: absolute;
+  top: 18px;
+  width: 18px;
+}
+
 header button.cancel {
   background: #ddd;
   border-radius: 10px;
@@ -71,17 +79,6 @@ button {
   font-size: 12px;
 }
 
-/* Loading */
-.loading {
-  background: rgba(255, 255, 255, 0.8);
-  left: 50%;
-  margin-left: -100px;
-  padding: 20px 0;
-  position: absolute;
-  top: 100px;
-  width: 200px;
-}
-
 /* Matrix */
 .matrix {
   margin: 0 auto;
@@ -119,4 +116,48 @@ text.month {
 
 .user-form button:hover {
   background: #ccc;
+}
+
+/* Spinner from http://tobiasahlin.com/spinkit/ */
+.spinner {
+  position: relative;
+}
+
+.double-bounce1, .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: bounce 2.0s infinite ease-in-out;
+  animation: bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce1 {
+  background-color: #d6e685;
+}
+
+.double-bounce2 {
+  background-color: #8cc665;
+
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
 }
