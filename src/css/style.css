@@ -119,6 +119,16 @@ text.month {
   background: #ccc;
 }
 
+/* Popup */
+.popup {
+  background: #fff;
+  border: 1px solid #000;
+  font-size: 16px;
+  padding: 5px 0;
+  position: absolute;
+  width: 150px;
+}
+
 /* Spinner from http://tobiasahlin.com/spinkit/ */
 .spinner {
   position: relative;

@@ -6,6 +6,22 @@ var React = require('react');
 var Color = require('./color');
 var Month = require('./month');
 
+var Day = React.createClass({
+  handleClick: function (e) {
+    this.props.clickHandler(this.props.date, e);
+  },
+  render: function () {
+    var style = { fill: Color.forCount(this.props.count) };
+    return <rect width={this.props.size}
+                 height={this.props.size}
+                 x={this.props.x}
+                 y={0}
+                 style={style}
+                 key={this.props.date}
+                 onClick={this.handleClick} />;
+  }
+});
+
 var PortraitMatrix = React.createClass({
   size: 20,
   margin: 6,
@@ -18,9 +34,11 @@ var PortraitMatrix = React.createClass({
       var offset = 7 - week.length;
       var rects = week.reverse().map(function (day, j) {
         if (day == null) return null;
-        var style = { fill: Color.forCount(day[1]) };
         var x = (j + offset) * self.unit();
-        return <rect width={self.size} height={self.size} x={x} y={0} style={style} key={day[0]} />;
+        return <Day size={self.size}
+                    x={x} date={day[0]}
+                    count={day[1]}
+                    clickHandler={self.handleClick} />;
       }).filter(Boolean);
       var transform = 'translate(0,' + i * self.unit() + ')';
       var key = 'week-' + i;
@@ -37,6 +55,9 @@ var PortraitMatrix = React.createClass({
     var transform = 'translate(' + self.unit() * 7 + ',0)';
     return <g transform={transform} key="months">{texts}</g>;
   },
+  handleClick: function (date, e) {
+    this.props.clickHandler(date, e);
+  },
   render: function () {
     var groups = this.weekGroups();
     groups.push(this.textGroup());
@@ -51,12 +72,58 @@ var PortraitMatrix = React.createClass({
   }
 });
 
-var Matrix = React.createClass({
+var Popup = React.createClass({
   render: function () {
-    if (this.props.items.length === 0) {
-      return <p>No Data</p>;
-    }
+    var style = {
+      top: this.props.y - 55,
+      left: this.props.x - 75
+    };
+    return <div style={style} className="popup">
+      {this.props.date}
+      <br />
+      {this.props.count} contributions
+    </div>;
+  }
+});
 
+var Matrix = React.createClass({
+  getInitialState: function () {
+    return { selected: undefined };
+  },
+  handleClick: function (date, e) {
+    var self = this;
+
+    // http://stackoverflow.com/questions/5834298/getting-the-screen-pixel-coordinates-of-a-rect-element
+    var rect = e.target;
+    var svg = rect.ownerSVGElement;
+    var p = svg.createSVGPoint();
+    p.x = rect.x.animVal.value + rect.width.animVal.value / 2;
+    p.y = rect.y.animVal.value + window.scrollY;
+    var matrix = rect.getScreenCTM();
+    var screenPoint = p.matrixTransform(matrix);
+    var selected = { date: date, x: screenPoint.x, y: screenPoint.y };
+    console.log(screenPoint);
+
+    setTimeout(function () {
+      if (self.state.selected === selected) {
+        self.setState({ selected: undefined });
+      }
+    }, 2000);
+
+    self.setState({ selected: selected });
+  },
+  renderPopup: function () {
+    if (!this.state.selected) return '';
+
+    var x = this.state.selected.x;
+    var y = this.state.selected.y;
+    var date = this.state.selected.date;
+    var count = this.props.items.filter(function (day) {
+      return day[0] === date;
+    })[0][1];
+    return <Popup x={x} y={y} date={date} count={count} />;
+  },
+  renderMatrix: function () {
     var firstDay = new Date(this.props.items[0][0]);
     var offset = firstDay.getDay();
     var weeks = [];
@@ -83,7 +150,17 @@ var Matrix = React.createClass({
       }
     }
 
-    return <PortraitMatrix weeks={weeks} months={months} />;
+    return <PortraitMatrix weeks={weeks} months={months} clickHandler={this.handleClick} />;
+  },
+  render: function () {
+    if (this.props.items.length === 0) {
+      return <p>No Data</p>;
+    }
+
+    return <div>
+      {this.renderPopup()}
+      {this.renderMatrix()}
+    </div>;
   }
 });
 
