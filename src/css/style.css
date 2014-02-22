@@ -1,5 +1,6 @@
 body {
   font-family: sans-serif;
+  letter-spacing: 0.03em;
   padding: 0;
   margin: 0;
   text-align: center;
@@ -64,8 +65,8 @@ button {
 
 .stats-item {
   display: inline-block;
-  line-height: 0.9em;
-  padding: 20px 0 16px;
+  line-height: 1em;
+  padding: 20px 0 15px;
   width: 80px;
 }
 
