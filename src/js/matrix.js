@@ -6,6 +6,7 @@ var React = require('react');
 var Color = require('./color');
 var Month = require('./month');
 
+// Rectangle to represent a day of contributions.
 var Day = React.createClass({
   handleClick: function (e) {
     this.props.clickHandler(this.props.date, e);
@@ -22,12 +23,14 @@ var Day = React.createClass({
   }
 });
 
+// The actual matrix chart.
 var PortraitMatrix = React.createClass({
   size: 20,
   margin: 6,
   unit: function () {
     return this.size + this.margin;
   },
+  // Rows of weeks
   weekGroups: function () {
     var self = this;
     return this.props.weeks.reverse().map(function (week, i) {
@@ -45,7 +48,8 @@ var PortraitMatrix = React.createClass({
       return <g transform={transform} key={key}>{rects}</g>;
     });
   },
-  textGroup: function () {
+  // Months
+  monthTextGroup: function () {
     var self = this;
     var texts = self.props.months.map(function (month, i) {
       var y = (self.props.weeks.length - 1 - month[1] - 1) * self.unit() + self.size / 2 + 5;
@@ -60,7 +64,7 @@ var PortraitMatrix = React.createClass({
   },
   render: function () {
     var groups = this.weekGroups();
-    groups.push(this.textGroup());
+    groups.push(this.monthTextGroup());
 
     var width = 7 * this.size + 6 * this.margin + 30 * 2;
     var height = 53 * this.unit();
@@ -72,6 +76,7 @@ var PortraitMatrix = React.createClass({
   }
 });
 
+// Popup to show daily contributions.
 var Popup = React.createClass({
   render: function () {
     var style = {
@@ -90,6 +95,7 @@ var Matrix = React.createClass({
   getInitialState: function () {
     return { selected: undefined };
   },
+  // Handle click on a day rect and show popup for it.
   handleClick: function (date, e) {
     var self = this;
 
@@ -98,11 +104,20 @@ var Matrix = React.createClass({
     var svg = rect.ownerSVGElement;
     var p = svg.createSVGPoint();
     p.x = rect.x.animVal.value + rect.width.animVal.value / 2;
-    p.y = rect.y.animVal.value + window.scrollY;
+    p.y = rect.y.animVal.value;
     var matrix = rect.getScreenCTM();
     var screenPoint = p.matrixTransform(matrix);
-    var selected = { date: date, x: screenPoint.x, y: screenPoint.y };
-    console.log(screenPoint);
+    var selected = {
+      date: date,
+      x: screenPoint.x,
+      y: screenPoint.y + window.scrollY
+    };
+
+    // TODO: Create a util module to mock this.
+    // Mobile Safari seems to include scrollY in clientTop.
+    if (/webkit.*mobile/i.test(window.navigator.userAgent)) {
+      selected.y = screenPoint.y;
+    }
 
     setTimeout(function () {
       if (self.state.selected === selected) {

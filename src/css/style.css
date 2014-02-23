@@ -91,6 +91,14 @@ text.month {
   fill: #aaa;
 }
 
+.matrix rect {
+  /*
+    Make it clickable.
+    http://www.shdon.com/blog/2013/06/07/why-your-click-events-don-t-work-on-mobile-safari
+  */
+  cursor: pointer;
+}
+
 *:focus {
   outline: 0;
 }
