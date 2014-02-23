@@ -6,6 +6,7 @@ var React = require('react/addons');
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Color = require('./color');
 var Month = require('./month');
+var Browser = require('./browser');
 
 // Rectangle to represent a day of contributions.
 var Day = React.createClass({
@@ -22,7 +23,7 @@ var Day = React.createClass({
       key: this.props.date
     };
     // HACK: Use onTouchStart for mobile devices. onClick may have 300ms delay on them.
-    var eventName = window.document.ontouchstart ? 'onTouchStart' : 'onClick';
+    var eventName = Browser.isMobileWebkit() ? 'onTouchStart' : 'onClick';
     props[eventName] = this.handleClick;
     return React.DOM.rect(props);
   }
@@ -121,7 +122,7 @@ var Matrix = React.createClass({
 
     // TODO: Create a util module to mock this.
     // Mobile Safari seems to include scrollY in clientTop.
-    if (/webkit.*mobile/i.test(window.navigator.userAgent)) {
+    if (Browser.isMobileWebkit()) {
       // HACK: Not sure why but mobile Safari positions the popup 5px belower.
       selected.y = screenPoint.y - 5;
     }
