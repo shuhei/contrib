@@ -132,8 +132,8 @@ var Matrix = React.createClass({
     // TODO: Create a util module to mock this.
     // Mobile Safari seems to include scrollY in clientTop.
     if (Browser.isMobileWebkit()) {
-      // HACK: Not sure why but mobile Safari positions the popup 5px belower.
-      selected.y = screenPoint.y - 5;
+      // HACK: Not sure why but mobile Safari positions the popup a bit belower.
+      selected.y = screenPoint.y - 2;
     }
 
     setTimeout(function () {
