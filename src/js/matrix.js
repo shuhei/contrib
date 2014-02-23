@@ -2,7 +2,8 @@
 
 'use strict';
 
-var React = require('react');
+var React = require('react/addons');
+var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Color = require('./color');
 var Month = require('./month');
 
@@ -12,14 +13,18 @@ var Day = React.createClass({
     this.props.clickHandler(this.props.date, e);
   },
   render: function () {
-    var style = { fill: Color.forCount(this.props.count) };
-    return <rect width={this.props.size}
-                 height={this.props.size}
-                 x={this.props.x}
-                 y={0}
-                 style={style}
-                 key={this.props.date}
-                 onClick={this.handleClick} />;
+    var props = {
+      width: this.props.size,
+      height: this.props.size,
+      x: this.props.x,
+      y: 0,
+      style: { fill: Color.forCount(this.props.count) },
+      key: this.props.date
+    };
+    // HACK: Use onTouchStart for mobile devices. onClick may have 300ms delay on them.
+    var eventName = window.document.ontouchstart ? 'onTouchStart' : 'onClick';
+    props[eventName] = this.handleClick;
+    return React.DOM.rect(props);
   }
 });
 
@@ -80,13 +85,14 @@ var PortraitMatrix = React.createClass({
 var Popup = React.createClass({
   render: function () {
     var style = {
-      top: this.props.y - 55,
+      top: this.props.y - 60,
       left: this.props.x - 75
     };
+    var unit = this.props.count > 1 ? 'contributions' : 'contribution';
     return <div style={style} className="popup">
       {this.props.date}
       <br />
-      {this.props.count} contributions
+      {this.props.count} {unit}
     </div>;
   }
 });
@@ -116,27 +122,34 @@ var Matrix = React.createClass({
     // TODO: Create a util module to mock this.
     // Mobile Safari seems to include scrollY in clientTop.
     if (/webkit.*mobile/i.test(window.navigator.userAgent)) {
-      selected.y = screenPoint.y;
+      // HACK: Not sure why but mobile Safari positions the popup 5px belower.
+      selected.y = screenPoint.y - 5;
     }
 
     setTimeout(function () {
       if (self.state.selected === selected) {
         self.setState({ selected: undefined });
       }
-    }, 2000);
+    }, 3000);
 
     self.setState({ selected: selected });
   },
   renderPopup: function () {
-    if (!this.state.selected) return '';
+    var items = [];
 
-    var x = this.state.selected.x;
-    var y = this.state.selected.y;
-    var date = this.state.selected.date;
-    var count = this.props.items.filter(function (day) {
-      return day[0] === date;
-    })[0][1];
-    return <Popup x={x} y={y} date={date} count={count} />;
+    if (this.state.selected) {
+      var x = this.state.selected.x;
+      var y = this.state.selected.y;
+      var date = this.state.selected.date;
+      var count = this.props.items.filter(function (day) {
+        return day[0] === date;
+      })[0][1];
+      items.push(<Popup x={x} y={y} date={date} count={count} key='popup' />);
+    }
+
+    return <CSSTransitionGroup component={React.DOM.div} transitionName="popup">
+      {items}
+    </CSSTransitionGroup>;
   },
   renderMatrix: function () {
     var firstDay = new Date(this.props.items[0][0]);

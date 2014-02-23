@@ -2,7 +2,7 @@
 
 'use strict';
 
-var React = require('react');
+var React = require('react/addons');
 var UserForm = require('./user-form');
 var Contributions = require('./contributions');
 
@@ -27,6 +27,8 @@ var App = React.createClass({
       <UserForm onSubmit={this.handleSubmit} />;
   }
 });
+
+React.initializeTouchEvents(true);
 
 React.renderComponent(
   <App />,

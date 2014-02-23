@@ -4,7 +4,7 @@ var plumber = require('gulp-plumber');
 var manifest = require('gulp-manifest');
 var libBundle = require('./gulp-lib-bundle');
 
-var libs = ['react'];
+var libs = ['react/addons'];
 
 gulp.task('js', function () {
   return gulp.src('./src/js/app.js', { read: false })

@@ -97,6 +97,7 @@ text.month {
     http://www.shdon.com/blog/2013/06/07/why-your-click-events-don-t-work-on-mobile-safari
   */
   cursor: pointer;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 *:focus {
@@ -129,12 +130,46 @@ text.month {
 
 /* Popup */
 .popup {
-  background: #fff;
+  background: #000;
   border: 1px solid #000;
+  color: #fff;
   font-size: 16px;
   padding: 5px 0;
   position: absolute;
   width: 150px;
+}
+
+.popup:after {
+  border: solid transparent;
+  border-top-color: #000;
+  border-width: 10px;
+  content: " ";
+  height: 0;
+  left: 50%;
+  position: absolute;
+  margin-left: -10px;
+  top: 100%;
+  width: 0;
+}
+
+.popup-enter {
+  opacity: 0.01;
+  transition: opacity .2s ease-out;
+  -webkit-transition: opacity .2s ease-out;
+}
+
+.popup-enter.popup-enter-active {
+  opacity: 1;
+}
+
+.popup-leave {
+  opacity: 1;
+  transition: opacity .2s ease-out;
+  -webkit-transition: opacity .2s ease-out;
+}
+
+.popup-leave.popup-leave-active {
+  opacity: 0.01;
 }
 
 /* Spinner from http://tobiasahlin.com/spinkit/ */
