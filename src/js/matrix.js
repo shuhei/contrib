@@ -6,6 +6,7 @@ var React = require('react/addons');
 var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 var Color = require('./color');
 var Month = require('./month');
+var DayOfTheWeek = require('./day-of-the-week');
 var Browser = require('./browser');
 
 // Rectangle to represent a day of contributions.
@@ -84,16 +85,24 @@ var PortraitMatrix = React.createClass({
 
 // Popup to show daily contributions.
 var Popup = React.createClass({
+  renderDate: function () {
+    var date = new Date(this.props.date);
+    var year = date.getFullYear();
+    var month = Month.forIndex(date.getMonth());
+    var day = date.getDate();
+    var dow = DayOfTheWeek.forIndex(date.getDay());
+    return [dow + ',', month, day, year].join(' ')
+  },
   render: function () {
     var style = {
-      top: this.props.y - 60,
-      left: this.props.x - 75
+      top: this.props.y - 52,
+      left: this.props.x - 65
     };
     var unit = this.props.count > 1 ? 'contributions' : 'contribution';
     return <div style={style} className="popup">
-      {this.props.date}
+      <span className="popup-date">{this.renderDate()}</span>
       <br />
-      {this.props.count} {unit}
+      <span className="popup-contributions">{this.props.count} {unit}</span>
     </div>;
   }
 });

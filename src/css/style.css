@@ -132,11 +132,12 @@ text.month {
 .popup {
   background: #000;
   border: 1px solid #000;
+  border-radius: 2px;
   color: #fff;
-  font-size: 16px;
+  font-size: 12px;
   padding: 5px 0;
   position: absolute;
-  width: 150px;
+  width: 130px;
 }
 
 .popup:after {
@@ -170,6 +171,14 @@ text.month {
 
 .popup-leave.popup-leave-active {
   opacity: 0.01;
+}
+
+.popup-date {
+  color: #ddd;
+}
+
+.popup-contributions {
+  font-weight: bold;
 }
 
 /* Spinner from http://tobiasahlin.com/spinkit/ */

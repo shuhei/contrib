@@ -1,23 +1,18 @@
 'use strict';
 
 var names = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec'
+  'Sun',
+  'Mon',
+  'Tue',
+  'Wed',
+  'Thu',
+  'Fri',
+  'Sat'
 ];
 
 function forIndex(index) {
   return names[index];
-}
+};
 
 module.exports = {
   names: names,
