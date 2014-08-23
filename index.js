@@ -17,7 +17,7 @@ server.on('request', function (request, response) {
   // -- Github Contributions
   if (p.indexOf(CONTRIBUTIONS) === 0) {
     var userName = p.slice(CONTRIBUTIONS.length);
-    var contribUrl = 'https://github.com/users/' + userName + '/contributions_calendar_data';
+    var contribUrl = 'https://github.com/users/' + userName + '/contributions';
     https.get(contribUrl)
       .on('response', function (res) {
         response.writeHead(res.statusCode, {
