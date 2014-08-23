@@ -17,13 +17,13 @@ server.on('request', function (request, response) {
   // -- Github Contributions
   if (p.indexOf(CONTRIBUTIONS) === 0) {
     var userName = p.slice(CONTRIBUTIONS.length);
-    var contribUrl = 'https://github.com/users/' + userName +
-                     '/contributions' + parsed.search;
+    var contribUrl = 'https://github.com/users/' + userName + '/contributions';
+    console.log(contribUrl);
     https.get(contribUrl)
       .on('response', function (res) {
+        console.log(res);
         response.writeHead(res.statusCode, {
-          'Content-Type': res.headers['content-type'],
-          'Content-Length': res.headers['content-length']
+          'Content-Type': res.headers['content-type']
         });
         res.pipe(response);
       })
