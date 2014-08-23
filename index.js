@@ -11,13 +11,14 @@ var server = http.createServer();
 
 server.on('request', function (request, response) {
   var parsed = url.parse(request.url);
-  var p = parsed.path;
+  var p = parsed.pathname;
   console.error(p);
 
   // -- Github Contributions
   if (p.indexOf(CONTRIBUTIONS) === 0) {
     var userName = p.slice(CONTRIBUTIONS.length);
-    var contribUrl = 'https://github.com/users/' + userName + '/contributions';
+    var contribUrl = 'https://github.com/users/' + userName +
+                     '/contributions' + parsed.search;
     https.get(contribUrl)
       .on('response', function (res) {
         response.writeHead(res.statusCode, {

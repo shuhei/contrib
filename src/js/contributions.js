@@ -42,7 +42,9 @@ var Contributions = React.createClass({
         console.log('Something went wrong.', xhr.status);
       }
     };
-    xhr.open('GET', '/contributions/' + self.props.user);
+    var timestamp = new Date().getTime();
+    var url = '/contributions/' + self.props.user + '?_=' + timestamp;
+    xhr.open('GET', url);
     this.setState({ isLoading: true });
     xhr.send(null);
   },
